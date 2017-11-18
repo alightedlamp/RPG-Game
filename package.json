@@ -24,6 +24,7 @@
     "gulp-babel": "^7.0.0",
     "gulp-clean-css": "^3.9.0",
     "gulp-concat": "^2.6.1",
+    "gulp-gh-pages": "^0.5.4",
     "gulp-htmlmin": "^3.0.0",
     "gulp-imagemin": "^3.4.0",
     "gulp-livereload": "^3.8.1",
@@ -39,8 +40,8 @@
     "webpack-stream": "^4.0.0"
   },
   "dependencies": {
-    "gulp-gh-pages": "^0.5.4",
     "jquery": "^3.2.1",
+    "mo-js": "^0.288.2",
     "p5": "^0.5.16",
     "three": "^0.88.0"
   }

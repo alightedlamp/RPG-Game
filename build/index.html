@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Art History RPG</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+  <section class="game">
+    <header>
+      <h1>
+        <span id="game-theme">Art History</span> RPG</h1>
+    </header>
+
+    <div id="main-app" style="display: none;">
+      <!-- Display the characters that can be chosen from for the game -->
+      <section id="players">
+      </section>
+      <!-- End players section -->
+
+      <!-- Put the user's player choice here once selected and game has started -->
+      <section>
+        <h2>Your player</h2>
+        <div id="player-choice">
+        </div>
+        <!-- End player choice div -->
+      </section>
+
+      <!-- Put the enemies here after a user has selected the characeter they want to be -->
+      <section>
+        <div id="enemies">
+          <h2>Enemies to Attack</h2>
+        </div>
+      </section>
+
+      <!-- The defender goes here once player decides to attack -->
+      <section id="defender">
+        <h2>Defender</h2>
+      </section>
+
+      <section id="controls">
+        <button class="btn" id="attack">Attack!</button>
+        <button class="btn" id="reset">Reset</button>
+      </section>
+
+      <section id="status">
+        <p></p>
+      </section>
+    </div>
+
+    <section id="start-container">
+      <button id="start">Start Game!</button>
+    </section>
+  </section>
+</body>
+
+<script type="text/javascript" src="./app.js"></script>
+
+</html>

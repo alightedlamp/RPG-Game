@@ -1,0 +1,35 @@
+@import 'reset.css';
+
+html {
+  background: url('../img/bg.jpg');
+  background-size: cover;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+.game {
+  width: 960px;
+  margin: 0 auto;
+  background: white;
+  opacity: 0.8;
+  padding: 1em;
+}
+#players {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.player {
+  cursor: pointer;
+  transition: 0.8s;
+}
+.player-header {
+}
+.player-health {
+  position: fixed;
+  bottom: 10px;
+
+  text-align: center;
+}
