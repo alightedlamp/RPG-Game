@@ -74,6 +74,7 @@ gulp.task('build-js', () => {
   const webpack = require('webpack-stream');
   const uglify = require('gulp-uglify');
   const pump = require('pump');
+  const replace = require('gulp-string-replace');
   const input = `${folder.source}/${config.entry}`;
   const out = folder.build;
   return gulp
@@ -86,6 +87,7 @@ gulp.task('build-js', () => {
       })
     )
     .on('error', handleError)
+    .pipe(replace(/["']*use strict["';]*/gi, '')) // Remove strict so MoJS doesn't blow up: https://github.com/legomushroom/mojs/issues/126
     .pipe(config.production ? uglify() : gutil.noop())
     .on('error', gutil.log)
     .pipe(gulp.dest(out))

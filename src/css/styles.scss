@@ -1,19 +1,25 @@
 @import 'reset.css';
 
-html {
-  background: url('../img/bg.jpg');
-  background-size: cover;
+h1,
+h2,
+h3 {
+  margin: 1em 0 0.5em 0;
 }
-
 h1 {
   font-size: 2em;
 }
+h2 {
+  font-size: 1.25em;
+}
+h3 {
+  font-size: 1.1em;
+}
 
 .game {
+  position: relative;
   width: 960px;
-  margin: 0 auto;
+  margin: 50px auto 150px auto;
   background: white;
-  opacity: 0.8;
   padding: 1em;
 }
 #players {
@@ -22,14 +28,24 @@ h1 {
   justify-content: space-between;
 }
 .player {
+  position: relative;
   cursor: pointer;
   transition: 0.8s;
+  margin: 10px;
+  width: 200px;
+
+  .image {
+    width: 75px;
+    height: 75px;
+    margin: 5px;
+  }
 }
 .player-header {
 }
 .player-health {
-  position: fixed;
-  bottom: 10px;
-
   text-align: center;
+}
+
+#status {
+  margin: 1em auto;
 }
