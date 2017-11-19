@@ -23,9 +23,6 @@ $(document).ready(function() {
 
       // Holds element name, character name, their health, and an image
       this.playerMap = playerMap;
-
-      // Create an array to hold onto remaining enemies
-      this.enemies = this.playerMap.map(enemy => enemy.name);
     }
     startGame(choice) {
       // Game has commenced!
@@ -34,17 +31,15 @@ $(document).ready(function() {
       // Grab the player object from the map
       this.currentPlayer = this.playerMap[choice.slice(-1) - 1];
 
-      // Grab player attribute values to keep object and array untouched
+      // Create an array to hold onto remaining enemies
+      this.enemies = this.playerMap.filter(
+        enemy => enemy.el !== this.currentPlayer.el
+      );
+
+      // Save to new variables because values change throughout game
       this.currentPlayerHealth = this.currentPlayer.health;
       this.currentPlayerAttackPower = this.currentPlayer.attackPower;
-      this.currentplayerCounterAttackPower = this.currentPlayer.counterAttackPower;
 
-      // Then push them to a new object - this seems ridiculous, but am doing it to avoid having to pass in all these args to funcs that update game states
-      this.currentPlayerAttributes = {
-        health: this.currentPlayerHealth,
-        attackPower: this.currentPlayerAttackPower,
-        counterAttackPower: this.currentplayerCounterAttackPower
-      };
       return this;
     }
     setDefender(choice) {
@@ -52,48 +47,41 @@ $(document).ready(function() {
 
       // Grab the player object from the map
       this.defender = this.playerMap[choice.slice(-1) - 1];
-
-      // Grab player attribute values to keep object and array untouched
       this.defenderHealth = this.defender.health;
-      this.defenderAttackPower = this.defender.attackPower;
-      this.defenderCounterAttackPower = this.defender.counterAttackPower;
 
-      // Then push them to a new object - this seems ridiculous, but am doing it to avoid having to pass in all these args to funcs that update game states
-      this.currentDefenderAttributes = {
-        health: this.defenderHealth,
-        attackPower: this.defenderAttackPower,
-        counterAttackPower: this.defenderCounterAttackPower
-      };
       return this;
     }
     attackDefender() {
       // Add health to user's player, decrement health from defender
-      this.defender.health -= this.player.attackPower;
-      this.player.health -= this.defender.counterAttackPower;
-      this.player.attackPower += this.defender.attackPower;
+      this.defenderHealth -= this.currentPlayerAttackPower;
+      this.currentPlayerHealth -= this.defender.counterAttackPower;
+      this.currentPlayerAttackPower += this.defender.attackPower;
 
       // Check health remaining, fork game
       // If user's health is 0 and defender is > 0, game over!
-      if (this.player.health <= 0 && this.defender.health > 0) {
+      if (this.currentPlayerHealth <= 0 && this.defenderHealth > 0) {
         return 'Game over, you lose!';
-      } else if (this.player.health > 0 && this.defender.health <= 0) {
-        this.eliminateDefender(this.defender);
+      } else if (this.currentPlayerHealth > 0 && this.defenderHealth <= 0) {
+        return this.eliminateDefender(this.defender);
+      } else if (this.currentPlayerHealth > 0 && this.defenderHealth > 0) {
+        return '';
+      } else {
+        return 'Well, this is awkward';
       }
-      // If user's health is > 0 and defender is <= 0, eliminateDefender
-      // Can the two be equal?
       return this;
     }
     eliminateDefender(player) {
       // Remove defender from DOM and this.enemeies
       $(`#${player.el}`).remove();
-      // this.enemies.splice(this.enemies.indexOf(player), 1);
+      this.enemies.splice(this.enemies.indexOf(player.el), 1);
 
       // If there are no more enemies left, the game is over!
-      if (this.enemies === 0) {
+      if (this.enemies.length === 0) {
         return 'You win!';
       } else {
         this.isFighting = false;
         this.defender = '';
+        return '';
       }
       return this;
     }
@@ -192,7 +180,7 @@ $(document).ready(function() {
       return this;
     }
     updateStatus(status) {
-      if (arguments.length > 0) {
+      if (arguments.length > 0 && arguments[0].length > 0) {
         $('#status')
           .append(`<div class="status-text">${status}</div>`)
           .css('display', 'block')
@@ -212,6 +200,10 @@ $(document).ready(function() {
         $('#status').empty();
       }
       return this;
+    }
+    updateAttributes(playerEl, defenderEl, playerHealth, defenderHealth) {
+      $(`#${playerEl} .player-health`).text(playerHealth);
+      $(`#${defenderEl} .player-health`).text(defenderHealth);
     }
     resetDisplay() {
       $('#main-app').css('display', 'none');
@@ -275,8 +267,16 @@ $(document).ready(function() {
     if (!game.defender) {
       display.updateStatus('There is no one to attack! Pick an enemy!');
     } else {
-      display.updateStatus().animate(e);
-      game.attackDefender();
+      display
+        .updateStatus()
+        .animate(e)
+        .updateStatus(game.attackDefender())
+        .updateAttributes(
+          game.currentPlayer.el,
+          game.defender.el,
+          game.currentPlayerHealth,
+          game.defenderHealth
+        );
     }
   });
 
