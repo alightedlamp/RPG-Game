@@ -8,29 +8,39 @@
 </head>
 
 <body>
+  <section id="status" style="opacity: 0; display: none">
+  </section>
+
   <section class="game">
     <header>
       <h1>
         <span id="game-theme">Art History</span> RPG</h1>
     </header>
 
-    <section id="status">
-      <p>Pick a player!</p>
+    <section id="players-container">
+      <h2>Pick a player!</h2>
+      <div id="players">
+      </div>
     </section>
 
 
     <div id="main-app" style="display: none;">
       <!-- Display the characters that can be chosen from for the game -->
-      <section id="players">
-      </section>
       <!-- End players section -->
 
       <!-- Put the user's player choice here once selected and game has started -->
       <section>
-        <h2>Your player</h2>
         <div id="player-choice">
+          <h2>Your player</h2>
         </div>
         <!-- End player choice div -->
+      </section>
+
+      <!-- The defender goes here once player decides to attack -->
+      <section>
+        <div id="defender">
+          <h2>Defender</h2>
+        </div>
       </section>
 
       <!-- Put the enemies here after a user has selected the characeter they want to be -->
@@ -39,20 +49,11 @@
           <h2>Enemies to Attack</h2>
         </div>
       </section>
-
-      <!-- The defender goes here once player decides to attack -->
-      <section id="defender">
-        <h2>Defender</h2>
-      </section>
-
-      <section id="controls">
-        <button class="btn" id="attack">Attack!</button>
-        <button class="btn" id="reset">Reset</button>
-      </section>
     </div>
 
-    <section id="start-container">
-      <button id="start">Start Game!</button>
+    <section id="controls">
+      <button class="btn" id="attack">Attack!</button>
+      <button class="btn" id="reset">Reset</button>
     </section>
   </section>
 </body>

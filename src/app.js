@@ -67,7 +67,10 @@ $(document).ready(function() {
     attackDefender() {
       console.log('attacking defender');
       // Add health to user's player
-      this.updateHealth(currentPlayerAttributes, currentDefenderAttributes);
+      this.updateHealth(
+        this.currentPlayerAttributes,
+        this.currentDefenderAttributes
+      );
       // Decrement health from defender
       // Check health remaining, fork game
       // If user's health is 0 and defender is > 0, game over!
@@ -133,13 +136,19 @@ $(document).ready(function() {
             </div>
           </div>
         `);
-        $('#main-app').css('display', 'block');
-        // ANIMATE SOMETHING HERE
-        $('#start').hide();
-        $('#status p').empty();
       });
     }
+    startGame() {
+      $('#main-app').css('display', 'flex');
+      $('#start').hide();
+      $('#status p').empty();
+    }
     showPlayerChoice(choice) {
+      // Remove the pick a player heading
+      $('#players-container h2').remove();
+
+      // Change the image sizes once a characeter has been selected and game started
+      $('.player').addClass('in-play');
       // Move player's choice to the appropriate div
       $(`#${choice.el}`)
         .detach()
@@ -156,27 +165,46 @@ $(document).ready(function() {
         .detach()
         .appendTo('#defender');
     }
-    // THIS DOESN'T WORK
-    animate(event) {
+    animate(event, el) {
       let parentEl;
-      if (game && game.defender) {
+      if (el) {
+        parentEl = el;
+      } else if (game && game.defender) {
         parentEl = `#${game.defender.el}`;
       } else {
         parentEl = '#main-app';
       }
       const burst = new mojs.Burst({
-        left: 0,
-        top: 0,
+        left: 40,
+        top: 60,
         parent: parentEl
       });
-      burst.tune({ x: event.clientX, y: event.clientY }).replay();
+      burst.replay();
     }
     updateStatus(status) {
-      $('#status p').text(status);
+      if (arguments.length > 0) {
+        $('#status')
+          .append(`<div class="status-text">${status}</div>`)
+          .css('display', 'block')
+          .animate({ opacity: 1 }, 250, 'linear', function() {
+            // After two seconds, make the status modal go away
+            setTimeout(
+              () =>
+                $(this).animate({ opacity: 0 }, 250, 'linear', () =>
+                  $(this)
+                    .css('display', 'none')
+                    .empty()
+                ),
+              750
+            );
+          });
+      } else {
+        $('#status').empty();
+      }
     }
     resetDisplay() {
       $('#main-app').css('display', 'none');
-      $('#start').show();
+      $('#players').append('<h2>Pick a player!</h2>');
       $('#player-choice').empty();
       $('#defender').empty();
       $('#enemies').empty();
@@ -194,35 +222,31 @@ $(document).ready(function() {
   let game;
   let display;
 
-  /*
-    Initalize the game once start button is selected - this is used to make the app flexible enough to 
-    easily handle other theme
-  */
-  $('#start').on('click', function startClickHandler(e) {
-    game = new Game();
-    display = new Display();
-    display.initializeDisplay();
-    display.animate(e);
-  });
+  display = new Display();
+  display.initializeDisplay();
 
   /* 
     Because the player elements are dynamically generated in the Display class, the event must be delegated 
     using `on`, so the event bubbles up from the dynamiclly generated `.player` element to the `players` containing div
   */
-  $('#players').on('click', '.player', function playerClickHandler() {
+  $('#players').on('click', '.player', function playerClickHandler(e) {
     // Set the user's choice based on the element's id clicked
     let choice = $(this).attr('id');
 
-    if (!game.isPlaying) {
-      // Start the game with user's choice and set isPlaying to true
+    if (!game) {
+      // Initialize the game and start with user's choice and set isPlaying to true
+      game = new Game();
       game.startGame(choice);
+      // Display game state change
+      display.startGame();
+      display.animate(e);
 
       // Create a new display and update the game state with player's choice and move emenies to the right space
       display.showPlayerChoice(game.currentPlayer);
     } else if (game.currentPlayer.el === choice) {
       // Offer some sort of feedback when player clicks themselves for some reason
       display.updateStatus("You're alive! You look nice, keep it up!");
-    } else if (game.defender) {
+    } else if (game.defender && game.isFighting) {
       // If there is a defender, you should not be able to click another characeter
       display.updateStatus(
         `You can't pick another enemy right now! Attack ${game.defender.name}!`
@@ -239,6 +263,7 @@ $(document).ready(function() {
     if (!game.defender) {
       display.updateStatus('There is no one to attack! Pick an enemy!');
     } else {
+      display.updateStatus();
       game.attackDefender();
       display.animate(e);
     }
