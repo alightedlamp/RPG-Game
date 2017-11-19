@@ -45,6 +45,7 @@ $(document).ready(function() {
         attackPower: this.currentPlayerAttackPower,
         counterAttackPower: this.currentplayerCounterAttackPower
       };
+      return this;
     }
     setDefender(choice) {
       this.isFighting = true;
@@ -63,36 +64,38 @@ $(document).ready(function() {
         attackPower: this.defenderAttackPower,
         counterAttackPower: this.defenderCounterAttackPower
       };
+      return this;
     }
     attackDefender() {
-      console.log('attacking defender');
-      // Add health to user's player
-      this.updateHealth(
-        this.currentPlayerAttributes,
-        this.currentDefenderAttributes
-      );
-      // Decrement health from defender
+      // Add health to user's player, decrement health from defender
+      this.defender.health -= this.player.attackPower;
+      this.player.health -= this.defender.counterAttackPower;
+      this.player.attackPower += this.defender.attackPower;
+
       // Check health remaining, fork game
       // If user's health is 0 and defender is > 0, game over!
+      if (this.player.health <= 0 && this.defender.health > 0) {
+        return 'Game over, you lose!';
+      } else if (this.player.health > 0 && this.defender.health <= 0) {
+        this.eliminateDefender(this.defender);
+      }
       // If user's health is > 0 and defender is <= 0, eliminateDefender
       // Can the two be equal?
+      return this;
     }
     eliminateDefender(player) {
       // Remove defender from DOM and this.enemeies
-      // ANIMATE REMOVAL
-      $(`#${player}`).remove();
-      this.enemies.splice(this.enemies.indexOf(player), 1);
+      $(`#${player.el}`).remove();
+      // this.enemies.splice(this.enemies.indexOf(player), 1);
 
       // If there are no more enemies left, the game is over!
       if (this.enemies === 0) {
-        // Update status bar
+        return 'You win!';
       } else {
         this.isFighting = false;
         this.defender = '';
       }
-    }
-    updateHealth(player, defender) {
-      console.log('update health');
+      return this;
     }
     initializePlayerAttriutes() {
       this.currentPlayer = '';
@@ -104,6 +107,7 @@ $(document).ready(function() {
       this.defenderHealth = 0;
       this.defenderAttackPower = 0;
       this.defenderCounterAttackPower = 0;
+      return this;
     }
     resetGame() {
       this.isPlaying = false;
@@ -111,6 +115,7 @@ $(document).ready(function() {
       this.defender = '';
 
       this.initializePlayerAttriutes();
+      return this;
     }
   }
 
@@ -137,11 +142,13 @@ $(document).ready(function() {
           </div>
         `);
       });
+      return this;
     }
     startGame() {
       $('#main-app').css('display', 'flex');
       $('#start').hide();
       $('#status p').empty();
+      return this;
     }
     showPlayerChoice(choice) {
       // Remove the pick a player heading
@@ -158,12 +165,14 @@ $(document).ready(function() {
       $('#players')
         .detach()
         .appendTo('#enemies');
+      return this;
     }
     showDefender(choice) {
       // Move chosen enemy into defender area of DOM
       $(`#${choice.el}`)
         .detach()
         .appendTo('#defender');
+      return this;
     }
     animate(event, el) {
       let parentEl;
@@ -180,6 +189,7 @@ $(document).ready(function() {
         parent: parentEl
       });
       burst.replay();
+      return this;
     }
     updateStatus(status) {
       if (arguments.length > 0) {
@@ -201,6 +211,7 @@ $(document).ready(function() {
       } else {
         $('#status').empty();
       }
+      return this;
     }
     resetDisplay() {
       $('#main-app').css('display', 'none');
@@ -209,6 +220,7 @@ $(document).ready(function() {
       $('#defender').empty();
       $('#enemies').empty();
       $('#players').empty();
+      return this;
     }
   }
 
@@ -238,11 +250,11 @@ $(document).ready(function() {
       game = new Game();
       game.startGame(choice);
       // Display game state change
-      display.startGame();
-      display.animate(e);
-
-      // Create a new display and update the game state with player's choice and move emenies to the right space
-      display.showPlayerChoice(game.currentPlayer);
+      display
+        .startGame()
+        .animate(e)
+        // Create a new display and update the game state with player's choice and move emenies to the right space
+        .showPlayerChoice(game.currentPlayer);
     } else if (game.currentPlayer.el === choice) {
       // Offer some sort of feedback when player clicks themselves for some reason
       display.updateStatus("You're alive! You look nice, keep it up!");
@@ -263,9 +275,8 @@ $(document).ready(function() {
     if (!game.defender) {
       display.updateStatus('There is no one to attack! Pick an enemy!');
     } else {
-      display.updateStatus();
+      display.updateStatus().animate(e);
       game.attackDefender();
-      display.animate(e);
     }
   });
 
