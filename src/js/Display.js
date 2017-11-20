@@ -7,8 +7,6 @@ export default class Display {
   }
 
   initializeDisplay() {
-    const playersEl = $('<div id="players"></div>');
-    playersEl.appendTo('#players-container');
     this.playerMap.map(player => {
       $('#players').append(`
           <div class="player" id="${player.el}">
@@ -158,8 +156,11 @@ export default class Display {
     $('#main-app').css('display', 'none');
     $('#player-choice').empty();
     $('#defender').empty();
+    $('#players')
+      .empty()
+      .detach()
+      .appendTo('#players-container');
     $('#enemies').empty();
-    $('#players').empty();
     $('#attack').hide();
     $('#reset').hide();
 
