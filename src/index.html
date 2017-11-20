@@ -9,52 +9,51 @@
 
 <body>
   <section id="status" style="opacity: 0; display: none">
+    <div id="status-text"></div>
   </section>
 
-  <section class="game">
-    <header>
-      <h1>
-        <span id="game-theme">Art History</span> RPG</h1>
-    </header>
+  <header>
+    <h1>
+      <span id="game-theme">Art History</span> RPG</h1>
+  </header>
 
-    <section id="players-container">
-      <h2>Pick a player!</h2>
-      <div id="players">
+  <section id="players-container">
+    <h2>Pick a player!</h2>
+    <div id="players">
+    </div>
+  </section>
+
+
+  <div id="main-app" style="display: none;">
+    <!-- Display the characters that can be chosen from for the game -->
+    <!-- End players section -->
+
+    <!-- Put the user's player choice here once selected and game has started -->
+    <section>
+      <div id="player-choice">
+        <h2>Your player</h2>
+      </div>
+      <!-- End player choice div -->
+    </section>
+
+    <!-- The defender goes here once player decides to attack -->
+    <section>
+      <div id="defender">
+        <h2>Defender</h2>
       </div>
     </section>
 
-
-    <div id="main-app" style="display: none;">
-      <!-- Display the characters that can be chosen from for the game -->
-      <!-- End players section -->
-
-      <!-- Put the user's player choice here once selected and game has started -->
-      <section>
-        <div id="player-choice">
-          <h2>Your player</h2>
-        </div>
-        <!-- End player choice div -->
-      </section>
-
-      <!-- The defender goes here once player decides to attack -->
-      <section>
-        <div id="defender">
-          <h2>Defender</h2>
-        </div>
-      </section>
-
-      <!-- Put the enemies here after a user has selected the characeter they want to be -->
-      <section>
-        <div id="enemies">
-          <h2>Enemies to Attack</h2>
-        </div>
-      </section>
-    </div>
-
-    <section id="controls">
-      <button class="btn" id="attack">Attack!</button>
-      <button class="btn" id="reset">Reset</button>
+    <!-- Put the enemies here after a user has selected the characeter they want to be -->
+    <section>
+      <div id="enemies">
+        <h2>Enemies to Attack</h2>
+      </div>
     </section>
+  </div>
+
+  <section id="controls" style="display: none">
+    <button class="btn" id="attack">Attack!</button>
+    <button class="btn" id="reset">Reset</button>
   </section>
 </body>
 

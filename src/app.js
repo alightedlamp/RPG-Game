@@ -12,9 +12,8 @@ import Display from './js/Display';
 $(document).ready(function() {
   // Initalize game and display variables to the global scope, because I don't know a better way to use both in the Controller
   let game;
-  let display;
 
-  display = new Display();
+  const display = new Display();
   display.initializeDisplay();
 
   /* 
@@ -22,27 +21,35 @@ $(document).ready(function() {
     using `on`, so the event bubbles up from the dynamiclly generated `.player` element to the `players` containing div
   */
   $('#players').on('click', '.player', function playerClickHandler(e) {
+    // Initialize the game and start with user's choice and set isPlaying to true
+    function startRound() {
+      game = new Game();
+      game.startGame(choice);
+
+      display
+        .startGame()
+        .animate(game, e)
+        .showPlayerChoice(game.currentPlayer);
+    }
+
     // Set the user's choice based on the element's id clicked
     let choice = $(this).attr('id');
 
     if (!game) {
-      // Initialize the game and start with user's choice and set isPlaying to true
-      game = new Game();
-      game.startGame(choice);
-      // Display game state change
-      display
-        .startGame()
-        .animate(game, e)
-        // Create a new display and update the game state with player's choice and move emenies to the right space
-        .showPlayerChoice(game.currentPlayer);
+      // If the game hasn't started once yet, start it
+      startRound();
+    } else if (game.enemies.length === 0 && !game.isPlaying) {
+      // If the game has started once, and has been reset - DOESN'T WORK
+      startRound();
     } else if (game.currentPlayer.el === choice) {
       // Offer some sort of feedback when player clicks themselves for some reason
       display.updateStatus("You're alive! You look nice, keep it up!");
-    } else if (game.defender && game.isFighting) {
+    } else if (game.defender && game.isFighting && game.isPlaying) {
       // If there is a defender, you should not be able to click another characeter
-      display.updateStatus(
-        `You can't pick another enemy right now! Attack ${game.defender.name}!`
-      );
+      display.updateStatus('ALREADY_ATTACKING', game.defender);
+    } else if (game.defender && !game.isPlaying) {
+      // Try to nudge user to start a new game by highlighting reset button
+      display.animate(game, event, '#reset');
     } else {
       // Set the defender
       game.setDefender(choice);
@@ -53,25 +60,27 @@ $(document).ready(function() {
 
   $('#attack').on('click', function attackClickHandler(e) {
     if (!game.defender) {
-      display.updateStatus('There is no one to attack! Pick an enemy!');
+      // If there is no defender, tell user to pick someone
+      display.updateStatus('IDLE');
     } else {
+      // Update health values in game and display
+      let currentDefender = game.defender;
       display
         .updateStatus()
         .animate(game, e)
-        .updateStatus(game.attackDefender())
+        .updateStatus(game.attackDefender(), currentDefender)
         .updateAttributes(
           game.currentPlayer.el,
           game.defender.el,
           game.currentPlayerHealth,
-          game.defenderHealth
+          game.defenderHealth,
+          game.currentPlayerAttackPower
         );
     }
   });
 
   $('#reset').on('click', function resetClickHandler() {
-    if (game.isPlaying) {
-      game.resetGame();
-      display.resetDisplay();
-    }
+    game.resetGame();
+    display.resetDisplay().initializeDisplay();
   });
 });

@@ -6,7 +6,7 @@ Through this project, I practiced ES6 `Class` syntax and employed the MVC patter
 
 ## Usage
 
-Clone repo: git clone https://github.com/alightedlamp/RPG-Game
+Clone repo: `git clone https://github.com/alightedlamp/RPG-Game`
 
 Install dependencies: `npm install`
 

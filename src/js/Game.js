@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { playerMap } from './playerMap';
 
 export default class Game {
@@ -46,26 +45,27 @@ export default class Game {
     this.currentPlayerAttackPower += this.defender.attackPower;
 
     // Check health remaining, fork game
-    // If user's health is 0 and defender is > 0, game over!
     if (this.currentPlayerHealth <= 0 && this.defenderHealth > 0) {
-      return 'Game over, you lose!';
+      this.isPlaying = false;
+      return 'GAME_OVER_LOSER';
     } else if (this.currentPlayerHealth > 0 && this.defenderHealth <= 0) {
-      return this.eliminateDefender(this.defender);
+      this.eliminateDefender(this.defender);
+      return 'ELIMINATED';
     } else if (this.currentPlayerHealth > 0 && this.defenderHealth > 0) {
       return '';
     } else {
-      return 'Well, this is awkward';
+      return 'ERROR';
     }
     return this;
   }
   eliminateDefender(player) {
     // Remove defender from DOM and this.enemeies
-    $(`#${player.el}`).remove(); // This should be part of the view
     this.enemies.splice(this.enemies.indexOf(player.el), 1);
 
     // If there are no more enemies left, the game is over!
     if (this.enemies.length === 0) {
-      return 'You win!';
+      this.isPlaying = false;
+      return 'GAME_OVER_WINNER';
     } else {
       this.isFighting = false;
       this.defender = '';
@@ -89,6 +89,7 @@ export default class Game {
     this.isPlaying = false;
     this.playerChoice = '';
     this.defender = '';
+    this.enemies = [];
 
     this.initializePlayerAttriutes();
     return this;

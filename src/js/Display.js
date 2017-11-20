@@ -7,14 +7,18 @@ export default class Display {
   }
 
   initializeDisplay() {
+    const playersEl = $('<div id="players"></div>');
+    playersEl.appendTo('#players-container');
     this.playerMap.map(player => {
       $('#players').append(`
           <div class="player" id="${player.el}">
             <h3 class="player-header">${player.name}</h3>
             <div class="image" style="background-image: url('${player.image}'); background-size: cover; background-position: center">
             </div>
-            <div class="player-health">
-              <p>${player.health}</p>
+            <div class="player-attributes">
+              <div class="player-health">
+                <p>HP: ${player.health}</p>
+              </div>
             </div>
           </div>
         `);
@@ -22,8 +26,17 @@ export default class Display {
     return this;
   }
   startGame() {
-    $('#main-app').css('display', 'flex');
+    $('#main-app').css({
+      display: 'flex',
+      justifyContent: 'center'
+    });
+    $('#controls').css('display', 'block');
     $('#start').hide();
+    $('#reset')
+      .text('Reset')
+      .show();
+    $('#enemies').show();
+    $('#defender').show();
     $('#status p').empty();
     return this;
   }
@@ -42,9 +55,13 @@ export default class Display {
     $('#players')
       .detach()
       .appendTo('#enemies');
+
+    // Hide attack button when there is no defender
+    $('#attack').hide();
     return this;
   }
   showDefender(choice) {
+    $('#attack').show();
     // Move chosen enemy into defender area of DOM
     $(`#${choice.el}`)
       .detach()
@@ -68,39 +85,84 @@ export default class Display {
     burst.replay();
     return this;
   }
-  updateStatus(status) {
+  updateStatus(status, player) {
     if (arguments.length > 0 && arguments[0].length > 0) {
-      $('#status')
-        .append(`<div class="status-text">${status}</div>`)
-        .css('display', 'block')
-        .animate({ opacity: 1 }, 250, 'linear', function() {
-          // After two seconds, make the status modal go away
-          setTimeout(
-            () =>
-              $(this).animate({ opacity: 0 }, 250, 'linear', () =>
-                $(this)
-                  .css('display', 'none')
-                  .empty()
-              ),
-            750
-          );
-        });
+      let message;
+
+      switch (status) {
+        case 'IDLE':
+          message = 'There is no one to attack! Pick an enemy!';
+          break;
+        case 'ELIMINATED':
+          $(`#${player.el}`).remove();
+          $('#attack').hide();
+          break;
+        case 'ALREADY_ATTACKING':
+          message = `You can't pick another enemy right now! Attack ${player.name}!`;
+          break;
+        case 'GAME_OVER_LOSER':
+          message = 'Game over, you lose!';
+          $('#attack').hide();
+          $('#reset').text('Play Again');
+          break;
+        case 'GAME_OVER_WINNER':
+          message = 'You win!';
+          $('#attack').hide();
+          $('#enemies').hide();
+          $('#defender').hide();
+          $('#reset').text('Play Again');
+          break;
+        default:
+          message = 'Well, this is awkward';
+      }
+      if (message && message.length > 0) {
+        this.displayMessage(message);
+      }
     } else {
-      $('#status').empty();
+      $('#status-message').empty();
     }
     return this;
   }
-  updateAttributes(playerEl, defenderEl, playerHealth, defenderHealth) {
-    $(`#${playerEl} .player-health`).text(playerHealth);
-    $(`#${defenderEl} .player-health`).text(defenderHealth);
+  displayMessage(message) {
+    $('#status-text').text(message);
+    $('#status')
+      .css('display', 'block')
+      .animate({ opacity: 1 }, 250, 'linear', function() {
+        // After two seconds, make the status modal go away
+        setTimeout(
+          () =>
+            $(this).animate({ opacity: 0 }, 250, 'linear', () => {
+              $(this).css('display', 'none');
+              $('#status-text').empty();
+            }),
+          750
+        );
+      });
+  }
+  updateAttributes(
+    playerEl,
+    defenderEl,
+    playerHealth,
+    defenderHealth,
+    currentPlayerAttackPower
+  ) {
+    $(`#${playerEl} .player-attributes .player-health`).html(
+      `<p><em>HP:</em> ${playerHealth}</p>`
+    );
+    $(`#${defenderEl} .player-attributes  .player-health`).html(
+      `<p><em>HP:</em> ${defenderHealth}</p>`
+    );
   }
   resetDisplay() {
+    $('#players-container').prepend('<h2>Pick a player!</h2>');
     $('#main-app').css('display', 'none');
-    $('#players').append('<h2>Pick a player!</h2>');
     $('#player-choice').empty();
     $('#defender').empty();
     $('#enemies').empty();
     $('#players').empty();
+    $('#attack').hide();
+    $('#reset').hide();
+
     return this;
   }
 }
