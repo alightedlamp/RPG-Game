@@ -66,19 +66,23 @@ export default class Display {
       .appendTo('#defender');
     return this;
   }
-  animate(game, event, el) {
-    let parentEl;
+  animateBurst(game, event, el) {
+    let parentEl = '';
+    let children = '';
+
     if (el) {
       parentEl = el;
     } else if (game && game.defender) {
       parentEl = `#${game.defender.el}`;
+      children = {
+        content: [game.currentPlayerAttackPower] // This doesn't work, but is a neat idea - should show current player's current attack power on the enemy when attacked
+      };
     } else {
       parentEl = '#main-app';
     }
     const burst = new mojs.Burst({
-      left: 40,
-      top: 60,
-      parent: parentEl
+      parent: parentEl,
+      children: children
     });
     burst.replay();
     return this;
@@ -90,6 +94,9 @@ export default class Display {
       switch (status) {
         case 'IDLE':
           message = 'There is no one to attack! Pick an enemy!';
+          break;
+        case 'SELF':
+          message = "You're alive! You look nice, keep it up!";
           break;
         case 'ELIMINATED':
           $(`#${player.el}`).remove();

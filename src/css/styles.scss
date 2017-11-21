@@ -19,6 +19,7 @@ h1 {
   text-align: center;
 }
 h2 {
+  margin-top: 50px;
   font-size: 1.5em;
   text-align: center;
 }
@@ -38,7 +39,7 @@ header {
   padding: 1em;
 
   section {
-    height: 300px;
+    // height: 300px;
     margin: 25px;
     padding: 20px;
 
@@ -47,6 +48,7 @@ header {
 }
 #players {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 .player {
@@ -57,7 +59,7 @@ header {
 
   .image {
     width: 200px;
-    height: 500px;
+    height: 375px;
     margin: 5px;
     transition: 1s;
   }

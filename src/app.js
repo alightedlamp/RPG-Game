@@ -10,7 +10,7 @@ import Game from './js/Game';
 import Display from './js/Display';
 
 $(document).ready(function() {
-  // Initalize game and display variables to the global scope, because I don't know a better way to use both in the Controller
+  // Initalize game and display variables to the document
   let game;
 
   const display = new Display();
@@ -28,7 +28,7 @@ $(document).ready(function() {
 
       display
         .startGame()
-        .animate(game, e)
+        .animateBurst(game, e)
         .showPlayerChoice(game.currentPlayer);
     }
 
@@ -36,20 +36,20 @@ $(document).ready(function() {
     let choice = $(this).attr('id');
 
     if (!game) {
-      // If the game hasn't started once yet, start it
+      // Start game if the game hasn't started once yet
       startRound();
     } else if (game.enemies.length === 0 && !game.isPlaying) {
-      // If the game has started once, and has been reset - DOESN'T WORK
+      // Start over if the game has started once and has been reset
       startRound();
     } else if (game.currentPlayer.el === choice) {
-      // Offer some sort of feedback when player clicks themselves for some reason
-      display.updateStatus("You're alive! You look nice, keep it up!");
+      // Offer some sort of feedback when player clicks themselves for some reason - FIX THIS
+      display.updateStatus('SELF');
     } else if (game.defender && game.isFighting && game.isPlaying) {
       // If there is a defender, you should not be able to click another characeter
       display.updateStatus('ALREADY_ATTACKING', game.defender);
     } else if (game.defender && !game.isPlaying) {
       // Try to nudge user to start a new game by highlighting reset button
-      display.animate(game, event, '#reset');
+      display.animateBurst(game, event, '#reset');
     } else {
       // Set the defender
       game.setDefender(choice);
@@ -67,7 +67,7 @@ $(document).ready(function() {
       let currentDefender = game.defender;
       display
         .updateStatus()
-        .animate(game, e)
+        .animateBurst(game, e)
         .updateStatus(game.attackDefender(), currentDefender)
         .updateAttributes(
           game.currentPlayer.el,

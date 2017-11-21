@@ -1,8 +1,6 @@
 # RPG Game
 
-A JavaScript-based Role Playing Game, that through modules and themes makes the program flexible to support various themes.
-
-Through this project, I practiced ES6 `Class` syntax and employed the MVC pattern in order to separate concerns.
+A JavaScript-based Role Playing Game.
 
 ## Usage
 
@@ -12,6 +10,7 @@ Install dependencies: `npm install`
 
 Run server: `gulp`
 
-## Customize
+## Built With
 
-To customize this app to make the RGP game your own, update the `playerData` module in `/js` with your own characters, and the `theme` module with your own background, title, and description.
+- jQuery
+- [MoJS](http://mojs.io/)
