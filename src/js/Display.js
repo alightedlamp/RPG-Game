@@ -7,11 +7,15 @@ export default class Display {
   }
 
   initializeDisplay() {
+    $('#controls').css('display', 'none');
+
     this.playerMap.map(player => {
       $('#players').append(`
-          <div class="player" id="${player.el}">
+          <div class="player selection-screen" id="${player.el}">
             <h3 class="player-header">${player.name}</h3>
-            <div class="image" style="background-image: url('${player.image}'); background-size: cover; background-position: center">
+            <div class="image" style="background-image: url('${
+              player.image
+            }'); background-size: cover; background-position: center">
             </div>
             <div class="player-attributes">
               <div class="player-health">
@@ -43,7 +47,9 @@ export default class Display {
     $('#players-container h2').remove();
 
     // Change the image sizes once a characeter has been selected and game started
-    $('.player').addClass('in-play');
+    $('.player')
+      .removeClass('selection-screen')
+      .addClass('in-play');
     // Move player's choice to the appropriate div
     $(`#${choice.el}`)
       .detach()
@@ -77,6 +83,7 @@ export default class Display {
       children = {
         content: [game.currentPlayerAttackPower] // This doesn't work, but is a neat idea - should show current player's current attack power on the enemy when attacked
       };
+      // $(`#${game.defender.el}`);
     } else {
       parentEl = '#main-app';
     }
@@ -103,7 +110,9 @@ export default class Display {
           $('#attack').hide();
           break;
         case 'ALREADY_ATTACKING':
-          message = `You can't pick another enemy right now! Attack ${player.name}!`;
+          message = `You can't pick another enemy right now! Attack ${
+            player.name
+          }!`;
           break;
         case 'GAME_OVER_LOSER':
           message = 'Game over, you lose!';
@@ -133,7 +142,7 @@ export default class Display {
     $('#status')
       .css('display', 'block')
       .animate({ opacity: 1 }, 250, 'linear', function() {
-        // After two seconds, make the status modal go away
+        // Hide the status modal go away after a slight delay
         setTimeout(
           () =>
             $(this).animate({ opacity: 0 }, 250, 'linear', () => {

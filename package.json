@@ -1,21 +1,21 @@
 {
-  "name": "crystalz",
+  "name": "rpg-game",
   "version": "1.0.0",
-  "description": "Crystals Collector Game",
+  "description": "RPG Game",
   "main": "app.js",
   "scripts": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alightedlamp/crystalz.git"
+    "url": "git+https://github.com/alightedlamp/RPG-Game.git"
   },
   "author": "Philip Harrell",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alightedlamp/crystalz/issues"
+    "url": "https://github.com/alightedlamp/RPG-Game/issues"
   },
-  "homepage": "https://github.com/alightedlamp/crystalz#readme",
+  "homepage": "https://github.com/alightedlamp/RPG-Game#readme",
   "devDependencies": {
     "autoprefixer": "^7.1.6",
     "babel-core": "^6.26.0",

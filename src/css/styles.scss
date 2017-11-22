@@ -33,8 +33,17 @@ header {
   background-color: $red;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
 }
+#game-container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-around;
+}
+#gameplay-container {
+  display: flex;
+}
 #main-app {
-  margin: 20px auto;
+  width: 80%;
+
   background: white;
   padding: 1em;
 
@@ -43,7 +52,11 @@ header {
     margin: 25px;
     padding: 20px;
 
-    border: 1px solid black;
+    border: 3px solid $red;
+
+    h2 {
+      margin: 15px 0 10px 0;
+    }
   }
 }
 #players {
@@ -53,20 +66,27 @@ header {
 }
 .player {
   cursor: pointer;
-  transition: 0.8s;
+  transition: 0.5s;
   margin: 10px;
   text-align: center;
 
   .image {
     width: 200px;
     height: 375px;
-    margin: 5px;
-    transition: 1s;
+    margin: 30px auto;
+    transition: 0.2s;
+  }
+
+  &:hover {
+    .image {
+      transform: scale(1.05);
+      box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    }
   }
 
   &.in-play {
     .image {
-      width: 100px;
+      margin: 10px;
       height: 100px;
       text-align: center;
     }
@@ -79,11 +99,19 @@ header {
 
 #controls {
   text-align: center;
+  margin: 20px;
+  padding: 1em;
+
   .btn {
     padding: 10px;
-    border-radius: 0;
+    width: 130px;
+    margin: 10px 0;
+
     font-size: 1.25em;
+
+    border-radius: 0;
     border: 3px solid $red;
+
     transition: 0.3s;
 
     &:hover {

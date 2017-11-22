@@ -34,6 +34,8 @@ export default class Game {
 
     // Grab the player object from the map
     this.defender = this.playerMap[choice.slice(-1) - 1];
+
+    // Save health to new variable because value changes throughout game
     this.defenderHealth = this.defender.health;
 
     return this;
