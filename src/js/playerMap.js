@@ -27,7 +27,7 @@ export const playerMap = [
     el: 'player-4',
     name: 'Leonardo da Vinci',
     image: './img/player4.jpg',
-    health: 175,
+    health: 237,
     attackPower: 26,
     counterAttackPower: 15
   },

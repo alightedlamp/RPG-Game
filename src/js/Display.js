@@ -65,11 +65,23 @@ export default class Display {
     return this;
   }
   showDefender(choice) {
+    // Clear attack status and replace attack button
+    $('#attack-status').empty();
     $('#attack').show();
     // Move chosen enemy into defender area of DOM
     $(`#${choice.el}`)
       .detach()
       .appendTo('#defender');
+    return this;
+  }
+  displayAttackValue(defender, attackValue) {
+    $('#attack-status').html(
+      `You attacked ${defender.name} for ${attackValue} points!`
+    );
+    return this;
+  }
+  clearAttackValue() {
+    $('#attack-status').empty();
     return this;
   }
   animateBurst(game, event, el) {
@@ -123,7 +135,6 @@ export default class Display {
           message = 'You win!';
           $('#attack').hide();
           $('#enemies').hide();
-          $('#defender').hide();
           $('#reset').text('Play Again');
           break;
         default:

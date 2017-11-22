@@ -63,11 +63,14 @@ $(document).ready(function() {
       // If there is no defender, tell user to pick someone
       display.updateStatus('IDLE');
     } else {
+      display.clearAttackValue();
+
       // Update health values in game and display
       let currentDefender = game.defender;
       display
         .updateStatus()
         .animateBurst(game, e)
+        .displayAttackValue(currentDefender, game.currentPlayerAttackPower)
         .updateStatus(game.attackDefender(), currentDefender)
         .updateAttributes(
           game.currentPlayer.el,

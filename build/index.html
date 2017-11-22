@@ -33,7 +33,7 @@
 
       <div>
         <!-- Put the user's player choice here once selected and game has started -->
-        <section>
+        <section id="player-container">
           <h2>Your player</h2>
           <div id="player-choice">
           </div>
@@ -41,7 +41,7 @@
         </section>
 
         <!-- The defender goes here once player decides to attack -->
-        <section>
+        <section id="defender-container">
           <h2>Defender</h2>
           <div id="defender">
           </div>
@@ -58,11 +58,15 @@
       </div>
 
       <!-- Put the enemies here after a user has selected the characeter they want to be -->
-      <section>
-        <h2>Enemies to Attack</h2>
-        <div id="enemies">
-        </div>
-      </section>
+      <div id="enemies-container">
+        <section>
+          <h2>Enemies to Attack</h2>
+          <div id="enemies">
+          </div>
+        </section>
+        <section id="attack-status">
+        </section>
+      </div>
     </div>
   </div>
 </body>
