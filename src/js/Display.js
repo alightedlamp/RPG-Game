@@ -181,6 +181,7 @@ export default class Display {
   resetDisplay() {
     $('#players-container').prepend('<h2>Pick a player!</h2>');
     $('#main-app').css('display', 'none');
+    $('#attack-status').empty();
     $('#player-choice').empty();
     $('#defender').empty();
     $('#players')
